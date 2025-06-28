@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { remult } from 'remult'
-import { AuthController } from '../server/controllers/AuthController.js'
 
 export interface User {
   id: string
@@ -28,7 +27,20 @@ export function useAuth() {
   // Check current user on mount
   const { data: currentUser, isLoading: isCheckingAuth } = useQuery({
     queryKey: ['currentUser'],
-    queryFn: () => AuthController.getCurrentUser(),
+    queryFn: async () => {
+      try {
+        const response = await fetch('/api/auth/current', {
+          credentials: 'include'
+        })
+        if (response.ok) {
+          return await response.json()
+        }
+        return null
+      } catch (error) {
+        console.error('Failed to get current user:', error)
+        return null
+      }
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
@@ -39,7 +51,21 @@ export function useAuth() {
       firstName?: string 
       lastName?: string 
     }) => {
-      return await AuthController.sendOTP(phone, firstName, lastName)
+      const response = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phone, firstName, lastName }),
+        credentials: 'include'
+      })
+      
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || 'Failed to send OTP')
+      }
+      
+      return await response.json()
     },
     onSuccess: (data) => {
       console.log('OTP sent successfully:', data)
@@ -52,7 +78,21 @@ export function useAuth() {
   // Verify OTP mutation
   const verifyOTPMutation = useMutation({
     mutationFn: async ({ phone, code }: { phone: string; code: string }) => {
-      return await AuthController.verifyOTP(phone, code)
+      const response = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phone, code }),
+        credentials: 'include'
+      })
+      
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || 'Failed to verify OTP')
+      }
+      
+      return await response.json()
     },
     onSuccess: (data) => {
       if (data.user) {
@@ -70,7 +110,18 @@ export function useAuth() {
 
   // Logout mutation
   const logoutMutation = useMutation({
-    mutationFn: () => AuthController.logout(),
+    mutationFn: async () => {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to logout')
+      }
+      
+      return await response.json()
+    },
     onSuccess: () => {
       setAuthState({
         user: null,
