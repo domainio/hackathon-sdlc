@@ -67,8 +67,8 @@ export class AuthController {
     }
   }
 
-  @BackendMethod({ allowed: true })
-  static async getCurrentUser() {
+  @BackendMethod({ allowed: true, apiPrefix: "auth"})
+  static async current() {
     // This will be implemented with proper session management
     // For now, return null (not authenticated)
     return null
