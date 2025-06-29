@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { remult } from 'remult'
 
@@ -20,7 +20,7 @@ export interface AuthState {
 export function useAuth() {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
-    isLoading: false,
+    isLoading: true,
     isAuthenticated: false
   })
 
@@ -30,7 +30,12 @@ export function useAuth() {
     queryFn: async () => {
       try {
         const response = await fetch('/api/auth/current', {
-          credentials: 'include'
+          credentials: 'include',
+          method: 'POST', // hack since remult doesn't support GET requests as it seems.
+          body: JSON.stringify({args: []}),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         })
         if (response.ok) {
           return await response.json()
@@ -43,6 +48,17 @@ export function useAuth() {
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
+
+  // Update auth state when currentUser data changes
+  useEffect(() => {
+    if (!isCheckingAuth) {
+      setAuthState({
+        user: currentUser?.user || null,
+        isLoading: false,
+        isAuthenticated: !!currentUser?.user
+      })
+    }
+  }, [currentUser, isCheckingAuth])
 
   // Send OTP mutation
   const sendOTPMutation = useMutation({

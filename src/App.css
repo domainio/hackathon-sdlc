@@ -1,23 +1,81 @@
+/* App-specific styles with mobile-first responsive design */
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  display: flex;
+  flex-direction: column;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* Mobile-first layout containers */
+.app-container {
+  width: 100%;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  margin-left: auto;
+  margin-right: auto;
 }
+
+/* Responsive container sizes */
+@media (min-width: 640px) {
+  .app-container {
+    max-width: var(--container-sm);
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    max-width: var(--container-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-container {
+    max-width: var(--container-lg);
+  }
+}
+
+@media (min-width: 1280px) {
+  .app-container {
+    max-width: var(--container-xl);
+  }
+}
+
+/* Logo styles - responsive sizing */
+.logo {
+  height: 3rem; /* Mobile: 48px */
+  width: auto;
+  padding: var(--spacing-sm);
+  will-change: filter;
+  transition: filter 300ms ease;
+}
+
+@media (min-width: 768px) {
+  .logo {
+    height: 4rem; /* Tablet: 64px */
+    padding: var(--spacing-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo {
+    height: 5rem; /* Desktop: 80px */
+    padding: var(--spacing-lg);
+  }
+}
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/* Animation - respect user preferences */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -28,15 +86,280 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
+  .logo.animate {
     animation: logo-spin infinite 20s linear;
   }
 }
 
+/* Card component - mobile-first */
 .card {
-  padding: 2em;
+  padding: var(--spacing-md);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
 }
 
-.read-the-docs {
-  color: #888;
+@media (min-width: 768px) {
+  .card {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    padding: var(--spacing-xl);
+    border-radius: 16px;
+  }
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Feature cards grid - responsive */
+.feature-grid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: 1fr; /* Mobile: single column */
+}
+
+@media (min-width: 640px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr); /* Tablet: 2 columns */
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr); /* Desktop: 3 columns */
+    gap: var(--spacing-xl);
+  }
+}
+
+/* Dashboard layout */
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .dashboard-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+}
+
+/* Navigation styles - mobile-first */
+.nav-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .nav-main {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: #646cff;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    gap: var(--spacing-md);
+  }
+}
+
+/* Form styles - mobile optimized */
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .form-container {
+    padding: var(--spacing-lg);
+  }
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Loading states */
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error states */
+.error-message {
+  color: #ef4444;
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Success states */
+.success-message {
+  color: #10b981;
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Accessibility improvements */
+.focus-ring:focus {
+  outline: 2px solid #646cff;
+  outline-offset: 2px;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #646cff;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .card {
+    border: 2px solid currentColor;
+    background: transparent;
+  }
+  
+  .nav-brand {
+    border-bottom: 2px solid currentColor;
+  }
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .error-message {
+    color: #fca5a5;
+  }
+  
+  .success-message {
+    color: #6ee7b7;
+  }
+}
+
+/* Light mode specific adjustments */
+@media (prefers-color-scheme: light) {
+  .card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .error-message {
+    color: #dc2626;
+  }
+  
+  .success-message {
+    color: #059669;
+  }
+}
+
+/* Utility classes for responsive design */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+  
+  .hide-desktop {
+    display: none;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Responsive text alignment */
+.text-center-mobile {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .text-center-mobile {
+    text-align: left;
+  }
 }
