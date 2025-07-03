@@ -148,6 +148,8 @@ function RootComponent() {
                     to="/dashboard"
                   />
                   <NavLink
+                  component={Link}
+                    to="/login"
                     label="Logout"
                     leftSection={<IconLogout size={20} />}
                     onClick={() => {

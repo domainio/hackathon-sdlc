@@ -59,6 +59,7 @@ function LoginComponent() {
     setLoading(true)
     try {
       await verifyOTP(phone, otp, "login")
+      console.log('verifyOTP', verifyOTP)
       navigate({ to: '/dashboard' })
     } catch (err) {
       // Error is handled by useAuth hook

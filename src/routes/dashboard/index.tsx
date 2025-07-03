@@ -31,7 +31,7 @@ import { useAuthContext } from '../../contexts/AuthContext'
 export const Route = createFileRoute('/dashboard/')({
   component: DashboardComponent,
   beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated && !context.auth.isLoading) {
+    if (!context.auth.isAuthenticated) {
       throw redirect({
         to: '/login',
         search: {
@@ -47,6 +47,7 @@ export const Route = createFileRoute('/dashboard/')({
 function DashboardComponent() {
   const { user, isAuthenticated } = useAuthContext()
   if (!user) {
+    alert('user not found') 
     console.log('user', user)
     return  null
   }
@@ -70,7 +71,7 @@ function DashboardComponent() {
                 size="h2"
                 style={{ lineHeight: 1.2 }}
               >
-                Welcome, {user.firstName}!
+                Welcome, {user.name}!
               </Title>
               <Text 
                 size="md" 

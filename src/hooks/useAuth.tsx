@@ -13,13 +13,20 @@ export const  useAuth = () => {
   // Fetch current user with React Query
   const { data: userData, isLoading, refetch: refetchUser } = useQuery({
     queryKey: QUERY_KEYS.currentUser,
-    queryFn: () => authAPI.getCurrentUser(),
+    queryFn: () => authAPI.getCurrentUser().then(res => {
+      console.log('res', res)
+  
+
+      localStorage.setItem('user', JSON.stringify(res))
+      return res
+
+    }),
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: false,
     retryDelay: 10000,
   })
 
-  const user = userData?.user ?? null
+  const user = userData?.user ?? JSON.parse(localStorage.getItem('user') || 'null')
 
   // Logout mutation
   const logoutMutation = useMutation({
@@ -27,6 +34,7 @@ export const  useAuth = () => {
     onSuccess: () => {
       queryClient.setQueryData(QUERY_KEYS.currentUser, { user: null })
       queryClient.invalidateQueries({ queryKey: ['auth'] })
+      localStorage.removeItem('user')
     },
   })
 
