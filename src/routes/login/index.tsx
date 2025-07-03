@@ -23,7 +23,7 @@ import {
   IconArrowLeft,
   IconCheck 
 } from '@tabler/icons-react'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuthContext } from '../../contexts/AuthContext'
 
 export const Route = createFileRoute('/login/')({
   component: LoginComponent,
@@ -31,7 +31,7 @@ export const Route = createFileRoute('/login/')({
 
 function LoginComponent() {
   const navigate = useNavigate()
-  const { sendOTP, verifyOTP, sendOTPError, verifyOTPError } = useAuth()
+  const { sendOTP, verifyOTP, sendOTPError, verifyOTPError } = useAuthContext()
   const [activeStep, setActiveStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [phone, setPhone] = useState('')
@@ -44,7 +44,7 @@ function LoginComponent() {
     
     setLoading(true)
     try {
-      await sendOTP(phone)
+      await sendOTP(phone, "login")
       setActiveStep(1)
     } catch (err) {
       // Error is handled by useAuth hook
@@ -58,7 +58,7 @@ function LoginComponent() {
     
     setLoading(true)
     try {
-      await verifyOTP(phone, otp)
+      await verifyOTP(phone, otp, "login")
       navigate({ to: '/dashboard' })
     } catch (err) {
       // Error is handled by useAuth hook

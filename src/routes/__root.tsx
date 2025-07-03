@@ -1,4 +1,4 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Link, Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import {
   AppShell,
@@ -14,17 +14,28 @@ import {
 } from '@mantine/core'
 import { useDisclosure, useViewportSize } from '@mantine/hooks'
 import { IconHome, IconDashboard, IconLogout } from '@tabler/icons-react'
-import { useAuth } from '../hooks/useAuth'
+import { AuthLoader } from '../components/AuthLoader'
+import type { AuthState } from '../types/auth.types'
+import { useAuthContext } from '../contexts/AuthContext'
+interface MyRouterContext {
+  // The ReturnType of your useAuth hook or the value of your AuthContext
+  auth: AuthState
+}
+// export const Route = createRootRoute({
+//   component: () => <RootComponent />,
+// })
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => <RootComponent />,
 })
 
 function RootComponent() {
-  const { isAuthenticated, logout } = useAuth()
+  const { isAuthenticated, logout , isLoading} = useAuthContext()
   const [opened, { toggle, close }] = useDisclosure(false)
   const { width } = useViewportSize()
   const isMobile = width < 768
+
+  if (isLoading) return <AuthLoader />
 
   return (
     <>
@@ -56,7 +67,7 @@ function RootComponent() {
                     <Title 
                       order={2} 
                       c="blue" 
-                      size={{ base: 'h3', sm: 'h2' }}
+                      size="h2"
                       style={{ fontWeight: 700 }}
                     >
                       IntIsrael
@@ -64,7 +75,7 @@ function RootComponent() {
                     <Badge 
                       color="green" 
                       variant="light" 
-                      size={{ base: 'sm', sm: 'md' }}
+                      size="md"
                       style={{ display: isMobile ? 'none' : 'block' }}
                     >
                       Financial Advisor

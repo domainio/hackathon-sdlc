@@ -17,14 +17,14 @@ import {
   IconChartBar, 
   IconArrowRight 
 } from '@tabler/icons-react'
-import { useAuth } from '../hooks/useAuth'
+import { useAuthContext } from '../contexts/AuthContext'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
 })
 
 function HomeComponent() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuthContext()
 
   if (isAuthenticated) {
     // Redirect authenticated users to dashboard
@@ -44,7 +44,7 @@ function HomeComponent() {
           c="dimmed"
           style={{ maxWidth: '500px' }}
         >
-          You're already logged in. Continue to your dashboard to manage your finances.
+          Continue to your dashboard to manage your finances.
         </Text>
         <Link to="/dashboard" style={{ textDecoration: 'none' }}>
           <Button 

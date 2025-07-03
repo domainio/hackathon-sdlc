@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import {
   Stack,
   Title,
@@ -23,33 +23,32 @@ import {
   IconUser,
   IconPhone,
   IconLanguage,
-  IconAlertTriangle,
   IconTrendingUp,
   IconCalendar
 } from '@tabler/icons-react'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuthContext } from '../../contexts/AuthContext'
 
 export const Route = createFileRoute('/dashboard/')({
   component: DashboardComponent,
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated && !context.auth.isLoading) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.href,
+        },
+      })
+    }
+  },
+  
+  
 })
 
 function DashboardComponent() {
-  const { user, isAuthenticated } = useAuth()
-
-  if (!isAuthenticated || !user) {
-    return (
-      <Container size="sm">
-        <Stack align="center" gap="xl" py="xl">
-          <ThemeIcon size={80} radius="xl" variant="light" color="red">
-            <IconAlertTriangle size={40} />
-          </ThemeIcon>
-          <Title order={1} ta="center">Access Denied</Title>
-          <Text ta="center" c="dimmed" size="lg">
-            Please log in to access your dashboard.
-          </Text>
-        </Stack>
-      </Container>
-    )
+  const { user, isAuthenticated } = useAuthContext()
+  if (!user) {
+    console.log('user', user)
+    return  null
   }
 
   return (

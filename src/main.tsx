@@ -14,6 +14,8 @@ import '@mantine/notifications/styles.css'
 import './index.css'
 import './App.css'
 import './responsive-utils.css'
+import { AuthProvider, useAuthContext } from './contexts/AuthContext'
+
 
 // Create a custom theme with mobile-first responsive design
 const theme = createTheme({
@@ -82,7 +84,13 @@ const theme = createTheme({
 })
 
 // Create a new router instance
-const router = createRouter({ routeTree })
+const router = createRouter({
+  routeTree, defaultPreload: 'intent',
+  scrollRestoration: true,
+  context: {
+    auth: undefined!, // This will be set after we wrap the app in an AuthProvider
+  },
+})
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -103,18 +111,27 @@ const queryClient = new QueryClient({
   },
 })
 
+function InnerApp() {
+  const auth = useAuthContext()
+  return <RouterProvider router={router} context={{ auth }} />
+}
+
+
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <MantineProvider theme={theme}>
-        <Notifications 
+        <Notifications
           position="top-right"
           zIndex={2077}
           containerWidth={280}
           notificationMaxHeight={200}
         />
-        <RouterProvider router={router} />
-      </MantineProvider>
+          <InnerApp />
+        </MantineProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,
 )

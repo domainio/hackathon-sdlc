@@ -1,9 +1,14 @@
 import { remultApi } from 'remult/remult-express'
-import { User, Staff, FinanceSnapshot, Appointment, Tag, Note, AuditEvent } from '../shared/entities/index.js'
+import { dataProvider, entities } from './config/database.js'
 import { AuthController } from './controllers/AuthController.js'
+import { sessionUtils } from './config/session.js'
 
 export const api = remultApi({
-  entities: [User, Staff, FinanceSnapshot, Appointment, Tag, Note, AuditEvent],
+  entities,
   controllers: [AuthController],
-  admin: true, // Enable admin mode for development - will use in-memory storage for now
+  dataProvider,
+  ensureSchema: true, // Disable automatic schema creation - we'll use migrations instead
+  admin: process.env.NODE_ENV === 'development', // Enable admin mode only in development
+  getUser: (req) => sessionUtils.getUser(req), // Get user from session
+  logApiEndPoints: process.env.NODE_ENV === 'development', // Log API endpoints in development
 })
