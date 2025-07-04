@@ -90,7 +90,7 @@ function HomeComponent() {
 
         {/* Features Grid */}
         <SimpleGrid 
-          cols={3} 
+          cols={1} 
           spacing="md"
           mt="lg"
         >

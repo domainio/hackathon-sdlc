@@ -14,9 +14,6 @@ export const  useAuth = () => {
   const { data: userData, isLoading, refetch: refetchUser } = useQuery({
     queryKey: QUERY_KEYS.currentUser,
     queryFn: () => authAPI.getCurrentUser().then(res => {
-      console.log('res', res)
-  
-
       localStorage.setItem('user', JSON.stringify(res))
       return res
 
@@ -53,6 +50,7 @@ export const  useAuth = () => {
       if (data.user) {
         queryClient.setQueryData(QUERY_KEYS.currentUser, { user: data.user })
         queryClient.invalidateQueries({ queryKey: ['auth'] })
+        localStorage.setItem('user', JSON.stringify(data.user))
       }
     },
     onError: (error) => {
