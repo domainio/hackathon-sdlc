@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { authAPI } from '../api/auth.api'
-import type { User, AuthType } from '../types/auth.types'
+import type { AuthType } from '../types/auth.types'
 
 const QUERY_KEYS = {
   currentUser: ['auth', 'currentUser'] as const,

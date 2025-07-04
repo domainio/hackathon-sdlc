@@ -17,11 +17,11 @@ app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
 // Health check endpoint
-app.get('/health', async (req, res) => {
+app.get('/health', async (_req, res) => {
   const sessionHealthy = await checkRedisHealth() // Returns true for cookie-session
   const status = sessionHealthy ? 'healthy' : 'unhealthy'
   const statusCode = sessionHealthy ? 200 : 503
-  
+
   res.status(statusCode).json({
     status,
     timestamp: new Date().toISOString(),
@@ -39,22 +39,28 @@ async function initializeServer() {
   try {
     // Initialize session system (cookie-session)
     await initializeRedis()
-    
+
     // Setup session middleware with cookie-session
     app.use(sessionConfig)
-    
+
     // Setup Remult API
     app.use(api)
-    
+
+    const frontendFiles = process.cwd() + "/dist";
+    app.use(express.static(frontendFiles));
+    app.get("/*", (_, res) => {
+      res.sendFile(frontendFiles + "/index.html");
+    });
+
     // Error handling middleware
-    app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error('Server error:', err)
       res.status(500).json({
         error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error',
         timestamp: new Date().toISOString()
       })
     })
-    
+
     // Start the server
     app.listen(PORT, () => {
       console.log(`🚀 Server started on http://localhost:${PORT}`)
@@ -63,7 +69,7 @@ async function initializeServer() {
         console.log(`🔧 Admin UI: http://localhost:${PORT}/api/admin`)
       }
     })
-    
+
   } catch (error) {
     console.error('Failed to initialize server:', error)
     process.exit(1)

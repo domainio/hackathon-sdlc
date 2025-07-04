@@ -2,11 +2,12 @@ import { Allow, BackendMethod, remult, type UserInfo } from 'remult'
 import { User } from '../../shared/entities/User.js'
 import { sessionUtils } from '../config/session.js'
 import { normalizePhone, isValidIsraeliPhone } from '../utils/phoneUtils.js'
-import { isValidEmail, maskPhone } from '../utils/validationUtils.js'
+import {  maskPhone } from '../utils/validationUtils.js'
 import { generateOtp, sendSms } from '../utils/otpUtils.js'
 
 import type express from 'express'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment
+// @ts-ignore: used for type augmentation only
 import type from 'cookie-session' // required to access the session member of the request object
 
 declare module 'express' {

@@ -16,7 +16,7 @@ export class AuditEvent {
 
   @Fields.string<AuditEvent, AuditEventType>({ 
     required: true,
-    validate: (event, field) => {
+    validate: (_event, field) => {
       if (!['AUTH', 'ONBOARD', 'API'].includes(field.value)) {
         throw new Error('Type must be AUTH, ONBOARD, or API')
       }
@@ -38,7 +38,7 @@ export class AuditEvent {
 
   @Fields.string<AuditEvent, APIProvider>({ 
     allowNull: true,
-    validate: (event, field) => {
+    validate: (_event, field) => {
       if (field.value && !['mislaka', 'harhabituah', 'gemelnet', 'calendly', 'docusign', 'sendgrid', 'twilio'].includes(field.value)) {
         throw new Error('API provider must be one of the supported providers')
       }
@@ -48,7 +48,7 @@ export class AuditEvent {
 
   @Fields.string<AuditEvent, AuditEventStatus>({ 
     allowNull: true,
-    validate: (event, field) => {
+    validate: (_event, field) => {
       if (field.value && !['success', 'error', 'pending'].includes(field.value)) {
         throw new Error('Status must be success, error, or pending')
       }
@@ -58,7 +58,7 @@ export class AuditEvent {
 
   @Fields.string<AuditEvent, TriggeredBy>({ 
     allowNull: true,
-    validate: (event, field) => {
+    validate: (_event, field) => {
       if (field.value && !['system', 'staff'].includes(field.value)) {
         throw new Error('TriggeredBy must be system or staff')
       }

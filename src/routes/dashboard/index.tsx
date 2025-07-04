@@ -45,7 +45,7 @@ export const Route = createFileRoute('/dashboard/')({
 })
 
 function DashboardComponent() {
-  const { user, isAuthenticated } = useAuthContext()
+  const { user } = useAuthContext()
   if (!user) {
     alert('user not found') 
     console.log('user', user)
@@ -284,7 +284,7 @@ function DashboardComponent() {
               <Group gap="xs">
                 <IconUser size={16} color="gray" />
                 <Text size="sm">
-                  <Text component="span" fw={500}>Name:</Text> {user.firstName} {user.lastName}
+                  <Text component="span" fw={500}>Name:</Text> {user.name}
                 </Text>
               </Group>
               

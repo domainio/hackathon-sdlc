@@ -28,7 +28,7 @@ export class Appointment {
 
   @Fields.string<Appointment, AppointmentStatus>({ 
     defaultValue: () => 'scheduled',
-    validate: (appointment, field) => {
+    validate: (_appointment, field) => {
       const validStatuses = ['scheduled', 'completed', 'canceled_by_user', 'no_show', 'follow_up_needed']
       if (!validStatuses.includes(field.value)) {
         throw new Error(`Status must be one of: ${validStatuses.join(', ')}`)

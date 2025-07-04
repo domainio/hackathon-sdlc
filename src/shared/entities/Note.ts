@@ -23,7 +23,7 @@ export class Note {
 
   @Fields.string({ 
     required: true,
-    validate: (note, field) => {
+    validate: (_note, field) => {
       if (field.value.length > 10000) {
         throw new Error('Note content cannot exceed 10,000 characters')
       }

@@ -23,7 +23,7 @@ export class Staff {
 
   @Fields.string<Staff, StaffRole>({ 
     required: true,
-    validate: (staff, field) => {
+    validate: (_staff, field) => {
       if (!['consultant', 'manager', 'admin'].includes(field.value)) {
         throw new Error('Role must be consultant, manager, or admin')
       }

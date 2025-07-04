@@ -10,7 +10,7 @@ export class Tag {
 
   @Fields.string({ 
     required: true,
-    validate: (tag, field) => {
+    validate: (_tag, field) => {
       if (field.value.length < 1 || field.value.length > 50) {
         throw new Error('Tag name must be between 1 and 50 characters')
       }
@@ -20,7 +20,7 @@ export class Tag {
 
   @Fields.string({ 
     required: true,
-    validate: (tag, field) => {
+    validate: (_tag, field) => {
       // Validate hex color format
       if (!/^#[0-9A-Fa-f]{6}$/.test(field.value)) {
         throw new Error('Color must be a valid hex color (e.g., #FF5733)')

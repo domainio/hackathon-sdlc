@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { AuthService } from '../server/services/AuthService.js'
-import { remult } from 'remult'
 
 // Mock Remult
 vi.mock('remult', async (importOriginal) => {

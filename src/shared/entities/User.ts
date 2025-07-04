@@ -1,4 +1,4 @@
-import { Entity, Fields, Relations, Allow } from 'remult'
+import { Entity, Fields, Allow } from 'remult'
 
 export type Language = 'he' | 'en'
 export type UserRole = 'user' | 'staff' | 'admin'
@@ -21,7 +21,7 @@ export class User {
 
   @Fields.string({ 
     required: true,
-    validate: (user, field) => {
+    validate: (_user, field) => {
       // Israeli phone number validation
       const phoneRegex = /^(\+972|0)([23489]|5[012345689]|77)[0-9]{7}$/
       if (!phoneRegex.test(field.value.replace(/[-\s]/g, ''))) {
@@ -39,7 +39,7 @@ export class User {
 
   @Fields.string<User, UserRole>({ 
     defaultValue: () => 'user',
-    validate: (user, field) => {
+    validate: (_user, field) => {
       if (!['user', 'staff', 'admin'].includes(field.value)) {
         throw new Error('Role must be user, staff, or admin')
       }
@@ -84,7 +84,7 @@ export class User {
 
   @Fields.string<User, Language>({ 
     defaultValue: () => 'he',
-    validate: (user, field) => {
+    validate: (_user, field) => {
       if (!['he', 'en'].includes(field.value)) {
         throw new Error('Language must be either "he" or "en"')
       }
