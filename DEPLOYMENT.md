@@ -13,6 +13,9 @@
 - [x] `Procfile` points to `npm start`
 - [x] Health check endpoint at `/health`
 - [x] NODE_ENV=production set in railway.json
+- [x] NODE_VERSION=24 set in railway.json
+- [x] `.nvmrc` file specifies Node.js 24
+- [x] `engines` field in package.json requires Node.js 24+
 
 ### 3. **Database Setup**
 - [x] PostgreSQL configuration with SSL for production
@@ -73,6 +76,7 @@ FROM_EMAIL=noreply@intai.dev
 - `DATABASE_URL` - PostgreSQL connection string
 - `SESSION_SECRET` - Must be 32+ characters for security
 - `NODE_ENV` - Set to "production" (configured in railway.json)
+- `NODE_VERSION` - Set to "24" (configured in railway.json)
 - `PORT` - Railway will set this automatically
 
 ### Optional Variables
