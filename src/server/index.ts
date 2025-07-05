@@ -48,7 +48,7 @@ async function initializeServer() {
 
     const frontendFiles = process.cwd() + "/dist";
     app.use(express.static(frontendFiles));
-    app.get("/*", (_, res) => {
+    app.get("/", (_, res) => {
       res.sendFile(frontendFiles + "/index.html");
     });
 
