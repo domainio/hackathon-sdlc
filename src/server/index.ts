@@ -2,9 +2,13 @@ import express from 'express'
 import { config } from 'dotenv'
 import { api } from './api.js'
 import { sessionConfig, initializeRedis, checkRedisHealth } from './config/session.js'
+import { validateAndExit, getConfigStatus } from './config/env-validator.js'
 
 // Load environment variables
 config()
+
+// Validate environment configuration (production only)
+validateAndExit()
 
 const app = express()
 const PORT = process.env.PORT || 3002
@@ -19,8 +23,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 // Health check endpoint
 app.get('/health', async (_req, res) => {
   const sessionHealthy = await checkRedisHealth() // Returns true for cookie-session
-  const status = sessionHealthy ? 'healthy' : 'unhealthy'
-  const statusCode = sessionHealthy ? 200 : 503
+  const configStatus = getConfigStatus()
+  const status = sessionHealthy && configStatus.valid ? 'healthy' : 'unhealthy'
+  const statusCode = sessionHealthy && configStatus.valid ? 200 : 503
 
   res.status(statusCode).json({
     status,
@@ -30,7 +35,12 @@ app.get('/health', async (_req, res) => {
       database: 'connected', // TODO: Add database health check
     },
     environment: process.env.NODE_ENV || 'development',
-    version: process.env.npm_package_version || '1.0.0'
+    version: process.env.npm_package_version || '1.0.0',
+    config: {
+      valid: configStatus.valid,
+      features: configStatus.features,
+      summary: configStatus.summary
+    }
   })
 })
 
