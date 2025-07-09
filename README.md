@@ -1,4 +1,0 @@
-# Attendance:
-
-- Jonathan Atia
-- Yoav

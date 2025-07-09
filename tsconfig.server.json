@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "ES2022",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "outDir": "dist",
+      "rootDir": "src",
+      "module": "nodenext"
+    },
+    "include": ["src/server/**/*", "src/shared/**/*"]
+  }
